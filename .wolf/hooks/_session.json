@@ -1,0 +1,101 @@
+{
+  "session_id": "session-2026-05-13-2224",
+  "started": "2026-05-13T19:24:06.703Z",
+  "files_read": {
+    "D:/Temp/ideaScope/ideascope.html": {
+      "count": 8,
+      "tokens": 34638,
+      "first_read": "2026-05-13T19:27:51.648Z"
+    }
+  },
+  "files_written": [
+    {
+      "file": "D:/Temp/ideaScope/package.json",
+      "action": "create",
+      "tokens": 45,
+      "at": "2026-05-13T19:35:36.629Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/vercel.json",
+      "action": "create",
+      "tokens": 110,
+      "at": "2026-05-13T19:35:38.540Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/_lib/cache.js",
+      "action": "create",
+      "tokens": 220,
+      "at": "2026-05-13T19:36:17.369Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/_lib/reddit.js",
+      "action": "create",
+      "tokens": 916,
+      "at": "2026-05-13T19:36:35.967Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/_lib/hackernews.js",
+      "action": "create",
+      "tokens": 352,
+      "at": "2026-05-13T19:36:45.565Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/_lib/producthunt.js",
+      "action": "create",
+      "tokens": 400,
+      "at": "2026-05-13T19:37:18.253Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/_lib/appstore.js",
+      "action": "create",
+      "tokens": 454,
+      "at": "2026-05-13T19:37:33.487Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/api/research.js",
+      "action": "create",
+      "tokens": 644,
+      "at": "2026-05-13T19:38:15.889Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/ideascope.html",
+      "action": "edit",
+      "tokens": 813,
+      "at": "2026-05-13T19:42:07.096Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/ideascope.html",
+      "action": "edit",
+      "tokens": 46,
+      "at": "2026-05-13T19:42:14.767Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/ideascope.html",
+      "action": "edit",
+      "tokens": 15,
+      "at": "2026-05-13T19:42:45.063Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/ideascope.html",
+      "action": "edit",
+      "tokens": 328,
+      "at": "2026-05-13T19:44:17.204Z"
+    }
+  ],
+  "edit_counts": {
+    "package.json": 1,
+    "vercel.json": 1,
+    "api/_lib/cache.js": 1,
+    "api/_lib/reddit.js": 1,
+    "api/_lib/hackernews.js": 1,
+    "api/_lib/producthunt.js": 1,
+    "api/_lib/appstore.js": 1,
+    "api/research.js": 1,
+    "ideascope.html": 4
+  },
+  "anatomy_hits": 1,
+  "anatomy_misses": 0,
+  "repeated_reads_warned": 7,
+  "cerebrum_warnings": 0,
+  "stop_count": 2
+}

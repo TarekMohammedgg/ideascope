@@ -1,0 +1,9 @@
+{
+  "name": "ideascope",
+  "version": "1.0.0",
+  "private": true,
+  "engines": { "node": "18.x" },
+  "dependencies": {
+    "@upstash/redis": "^1.28.0"
+  }
+}

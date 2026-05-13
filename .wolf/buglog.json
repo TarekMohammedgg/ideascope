@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "bugs": [
+    {
+      "id": "bug-001",
+      "timestamp": "2026-05-13T19:42:07.098Z",
+      "error_message": "Missing error handling in function",
+      "file": "ideascope.html",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "html"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-13T19:42:07.098Z"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-05-13T19:42:14.769Z",
+      "error_message": "Missing await",
+      "file": "ideascope.html",
+      "root_cause": "Async call without await — returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "html"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-13T19:42:14.769Z"
+    }
+  ]
+}
