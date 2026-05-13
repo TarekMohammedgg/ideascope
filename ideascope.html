@@ -1276,100 +1276,118 @@ Return exactly this JSON structure:
 }
 
 /* ══════════════════════════════════════
-   MARKET RESEARCH LAYER
+   MARKET RESEARCH LAYER — Gemini Web Search
 ══════════════════════════════════════ */
 
-// Maps Arabic keywords → English search terms so collectors can query English-language platforms
-const ARABIC_CATEGORY_MAP = [
-  { words: ['دواء','دوا','جرع','صيدل','علاج','مريض','دكتور','طبي'],  en: 'medication medicine pill tracker health app' },
-  { words: ['طعام','أكل','اكل','مطعم','توصيل','وجبة','مطاعم'],       en: 'food delivery restaurant meal' },
-  { words: ['تعليم','تدريس','درس','طالب','مدرس','كورس','منهج'],       en: 'education learning course app' },
-  { words: ['عقار','شقة','إيجار','ايجار','سكن','عمارة','فيلا'],       en: 'real estate property rental apartment' },
-  { words: ['بنك','مال','دفع','محفظ','معامل','فلوس','تحويل'],         en: 'finance payment banking wallet' },
-  { words: ['سفر','حجز','فندق','رحلة','طيران','سياحة'],               en: 'travel booking hotel flight' },
-  { words: ['تسوق','شراء','منتج','متجر','بيع'],                       en: 'shopping ecommerce store' },
-  { words: ['صح','لياقة','رياضة','تمرين','نظام غذائي'],               en: 'health fitness workout diet' },
-  { words: ['موسيقى','غناء','فيديو','ترفيه','مسلسل'],                 en: 'music video entertainment streaming' },
-  { words: ['توظيف','وظيفة','موظف','تعيين','cv'],                     en: 'jobs employment hiring resume' },
-  { words: ['توصيل','شحن','لوجستي','ناقل'],                           en: 'delivery logistics shipping courier' },
-  { words: ['تواصل','دردش','رسالة','محادثة','صديق'],                  en: 'social chat messaging communication' },
-  { words: ['صورة','تصوير','فلتر','تعديل'],                           en: 'photo editing camera filter' },
-  { words: ['خريطة','موقع','ملاحة','طريق','gps'],                     en: 'map navigation location GPS' },
-];
+function buildResearchPrompt(idea, markets) {
+  const marketLabels = { eg: 'Egypt', gulf: 'Gulf (Saudi Arabia, UAE)', us: 'United States' };
+  const selectedMarkets = markets.map(m => marketLabels[m] || m).join(', ');
+  return `You are a market research analyst. Use your web search capability to find REAL, current data about the following app idea.
 
-function extractSearchQuery(idea) {
-  // Pull out English words (≥3 chars)
-  const englishWords = (idea.match(/[a-zA-Z]{3,}/g) || []);
+App Idea: ${idea}
+Target Markets: ${selectedMarkets}
 
-  // Detect Arabic category
-  let categoryTerms = '';
-  for (const cat of ARABIC_CATEGORY_MAP) {
-    if (cat.words.some(w => idea.includes(w))) { categoryTerms = cat.en; break; }
-  }
+Search the web for:
+1. Existing competitor apps (App Store, Google Play, Product Hunt)
+2. Reddit/forum discussions about this problem
+3. Market size and demand indicators
+4. Recent news or trends in this space
 
-  // App name = first Title-Cased English word
-  const appName = englishWords.find(w => /^[A-Z]/.test(w)) || '';
-
-  // Filter out noise words from English list
-  const noise = new Set(['the','and','for','with','your','arabic','english','google','drive','backup','localization','auto','use','using']);
-  const extra  = englishWords.filter(w => w !== appName && !noise.has(w.toLowerCase())).slice(0, 3);
-
-  const parts = [appName, categoryTerms, ...extra].filter(Boolean);
-  const query = [...new Set(parts)].join(' ').trim();
-  return query.length >= 5 ? query : idea.replace(/[؀-ۿ\s]+/g, ' ').trim().slice(0, 80);
+Return ONLY valid JSON, no markdown, no text outside the JSON:
+{
+  "competitors": [
+    {"name": "<real app name>", "platform": "<iOS/Android/Web>", "strength": "<strong|mid|weak>", "note": "<one line>"}
+  ],
+  "marketSignals": {
+    "redditActivity": "<low|medium|high> — brief reason",
+    "appStoreCompetition": "<low|medium|high> — brief reason",
+    "demandIndicators": "<what you found about demand>",
+    "recentTrends": "<any relevant recent news or trends>"
+  },
+  "marketSize": "<estimated market size or 'not found'>",
+  "summary": "<2-3 sentences of real findings from the web>"
+}`;
 }
 
-async function fetchMarketSignals(idea, markets) {
-  const searchQuery = extractSearchQuery(idea);
+async function fetchMarketSignals(idea, markets, apiKey, provider) {
+  const researchPrompt = buildResearchPrompt(idea, markets);
   try {
-    const res = await fetch('/api/research', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea, markets, searchQuery }),
-    });
-    if (!res.ok) return null;
-    return await res.json();
+    let raw = '';
+
+    if (provider === 'google') {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: researchPrompt }] }],
+            tools: [{ google_search: {} }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 1024 }
+          })
+        }
+      );
+      if (!res.ok) return null;
+      const json = await res.json();
+      raw = json.candidates?.[0]?.content?.parts?.find(p => p.text)?.text || '';
+    } else {
+      // OpenRouter — use perplexity/sonar which has built-in live web search
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+          'HTTP-Referer': 'https://ideascope.app',
+          'X-Title': 'IdeaScope Research'
+        },
+        body: JSON.stringify({
+          model: 'perplexity/sonar',
+          messages: [{ role: 'user', content: researchPrompt }],
+          max_tokens: 1024,
+          temperature: 0.1
+        })
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      raw = json.choices?.[0]?.message?.content || '';
+    }
+
+    if (!raw) return null;
+    return JSON.parse(raw.replace(/```json|```/g, '').trim());
   } catch {
-    return null; // Fail silently — Gemini still runs without real signals
+    return null; // Fail silently — main analysis still runs without signals
   }
 }
 
 function buildSignalsBlock(signals) {
-  if (!signals?.signals) return '';
-  const s = signals.signals;
-  const lines = ['\n\n## REAL MARKET SIGNALS (collected live — treat these as ground truth):'];
+  if (!signals) return '';
+  const lines = ['\n\n## REAL MARKET RESEARCH (web search results — use as ground truth):'];
 
-  if (s.reddit && !s.reddit.error) {
-    lines.push(`\nReddit Activity (last 30 days):`);
-    lines.push(`- Posts found: ${s.reddit.postCount}`);
-    lines.push(`- Top post score: ${s.reddit.topScore} upvotes, avg comments: ${s.reddit.avgComments}`);
-    lines.push(`- Community interest: ${s.reddit.engagement}`);
-    if (s.reddit.topKeywords?.length) lines.push(`- Recurring topics: ${s.reddit.topKeywords.slice(0,6).join(', ')}`);
-    if (s.reddit.subreddits?.length) lines.push(`- Active subreddits: ${s.reddit.subreddits.join(', ')}`);
+  if (signals.summary) {
+    lines.push(`\nFindings: ${signals.summary}`);
   }
 
-  if (s.hackernews && !s.hackernews.error) {
-    lines.push(`\nHacker News (last 6 months):`);
-    lines.push(`- Stories: ${s.hackernews.storyCount}, total comments: ${s.hackernews.totalComments}, avg points: ${s.hackernews.avgPoints}`);
-    lines.push(`- Tech community interest: ${s.hackernews.interest}`);
-    if (s.hackernews.topStory) lines.push(`- Top story: "${s.hackernews.topStory.title}" (${s.hackernews.topStory.points} pts, ${s.hackernews.topStory.comments} comments)`);
-  }
-
-  if (s.productHunt && !s.productHunt.error) {
-    lines.push(`\nProduct Hunt:`);
-    lines.push(`- Related recent launches: ${s.productHunt.relatedLaunches}, market saturation: ${s.productHunt.saturation}`);
-    if (s.productHunt.relatedProducts?.length) lines.push(`- Similar products seen: ${s.productHunt.relatedProducts.join(', ')}`);
-  }
-
-  if (s.appStore && typeof s.appStore === 'object' && !s.appStore.error) {
-    lines.push(`\nApp Store Top-100 Rankings:`);
-    for (const [country, d] of Object.entries(s.appStore)) {
-      const top = d.relatedApps?.[0];
-      lines.push(`- ${country.toUpperCase()}: ${d.relatedCount} related apps, competition: ${d.competitorStrength}${top ? `, top match: "${top.name}" (#${top.rank})` : ''}`);
+  if (signals.competitors?.length) {
+    lines.push(`\nReal Competitors Found:`);
+    for (const c of signals.competitors) {
+      lines.push(`- ${c.name} (${c.platform}): ${c.strength} competitor — ${c.note}`);
     }
   }
 
-  lines.push(`\nInstruction: Use the signals above to calibrate scores. Do not invent search volumes. Base "competitionScore" on App Store data. Base "demand" on Reddit+HN engagement levels.`);
+  if (signals.marketSignals) {
+    const s = signals.marketSignals;
+    lines.push(`\nMarket Signals:`);
+    if (s.redditActivity)       lines.push(`- Reddit/Community activity: ${s.redditActivity}`);
+    if (s.appStoreCompetition)  lines.push(`- App Store competition: ${s.appStoreCompetition}`);
+    if (s.demandIndicators)     lines.push(`- Demand indicators: ${s.demandIndicators}`);
+    if (s.recentTrends)         lines.push(`- Recent trends: ${s.recentTrends}`);
+  }
+
+  if (signals.marketSize && signals.marketSize !== 'not found') {
+    lines.push(`- Market size: ${signals.marketSize}`);
+  }
+
+  lines.push(`\nInstruction: Base your scores and competitor list on the real data above. Do not contradict these findings.`);
   return lines.join('\n');
 }
 
@@ -1393,7 +1411,7 @@ async function startAnalysis() {
   document.getElementById('results').classList.remove('show');
   startLoadingAnim();
 
-  const marketSignals = await fetchMarketSignals(idea, activeMarkets);
+  const marketSignals = await fetchMarketSignals(idea, activeMarkets, apiKey, provider);
   const prompt = buildPrompt(idea, activeMarkets, marketSignals);
 
   try {
