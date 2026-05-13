@@ -4,6 +4,9 @@
       "maxDuration": 25
     }
   },
+  "rewrites": [
+    { "source": "/", "destination": "/ideascope.html" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

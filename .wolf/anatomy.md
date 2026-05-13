@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-13T20:01:24.017Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-13T20:11:59.327Z
 > Files: 12 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
@@ -8,7 +8,7 @@
 - `CLAUDE.md` — OpenWolf (~57 tok)
 - `ideascope.html` — IdeaScope — محلل الأسواق (~34654 tok)
 - `package.json` — Node.js package manifest (~45 tok)
-- `vercel.json` (~110 tok)
+- `vercel.json` (~132 tok)
 
 ## .claude/
 

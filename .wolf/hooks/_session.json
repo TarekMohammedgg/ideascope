@@ -6,6 +6,11 @@
       "count": 8,
       "tokens": 34638,
       "first_read": "2026-05-13T19:27:51.648Z"
+    },
+    "D:/Temp/ideaScope/vercel.json": {
+      "count": 1,
+      "tokens": 110,
+      "first_read": "2026-05-13T20:10:29.532Z"
     }
   },
   "files_written": [
@@ -86,11 +91,17 @@
       "action": "edit",
       "tokens": 9,
       "at": "2026-05-13T20:01:24.041Z"
+    },
+    {
+      "file": "D:/Temp/ideaScope/vercel.json",
+      "action": "edit",
+      "tokens": 132,
+      "at": "2026-05-13T20:11:59.355Z"
     }
   ],
   "edit_counts": {
     "package.json": 2,
-    "vercel.json": 1,
+    "vercel.json": 2,
     "api/_lib/cache.js": 1,
     "api/_lib/reddit.js": 1,
     "api/_lib/hackernews.js": 1,
@@ -99,9 +110,9 @@
     "api/research.js": 1,
     "ideascope.html": 4
   },
-  "anatomy_hits": 1,
+  "anatomy_hits": 2,
   "anatomy_misses": 0,
   "repeated_reads_warned": 7,
   "cerebrum_warnings": 0,
-  "stop_count": 3
+  "stop_count": 4
 }
