@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-13T19:23:41.283Z",
   "lifetime": {
-    "total_tokens_estimated": 156184,
-    "total_reads": 5,
-    "total_writes": 51,
+    "total_tokens_estimated": 236621,
+    "total_reads": 10,
+    "total_writes": 82,
     "total_sessions": 1,
-    "anatomy_hits": 5,
+    "anatomy_hits": 10,
     "anatomy_misses": 0,
-    "repeated_reads_blocked": 28,
-    "estimated_savings_vs_bare_cli": 970864
+    "repeated_reads_blocked": 43,
+    "estimated_savings_vs_bare_cli": 1491562
   },
   "sessions": [
     {
@@ -363,6 +363,225 @@
         "writes_count": 14,
         "repeated_reads_blocked": 7,
         "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-05-13-2224",
+      "started": "2026-05-13T19:24:06.703Z",
+      "ended": "2026-05-13T20:16:43.522Z",
+      "reads": [
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 34638,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 110,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "D:/Temp/ideaScope/package.json",
+          "tokens_estimated": 45,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 110,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/cache.js",
+          "tokens_estimated": 220,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/reddit.js",
+          "tokens_estimated": 916,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/hackernews.js",
+          "tokens_estimated": 352,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/producthunt.js",
+          "tokens_estimated": 400,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/appstore.js",
+          "tokens_estimated": 454,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/research.js",
+          "tokens_estimated": 644,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 813,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 15,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 328,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/package.json",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 132,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 34748,
+        "output_tokens_estimated": 4484,
+        "reads_count": 2,
+        "writes_count": 14,
+        "repeated_reads_blocked": 7,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-05-13-2224",
+      "started": "2026-05-13T19:24:06.703Z",
+      "ended": "2026-05-13T20:38:56.601Z",
+      "reads": [
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 34654,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 110,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/research.js",
+          "tokens_estimated": 644,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "D:/Temp/ideaScope/package.json",
+          "tokens_estimated": 45,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 110,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/cache.js",
+          "tokens_estimated": 220,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/reddit.js",
+          "tokens_estimated": 916,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/hackernews.js",
+          "tokens_estimated": 352,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/producthunt.js",
+          "tokens_estimated": 400,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/_lib/appstore.js",
+          "tokens_estimated": 454,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/research.js",
+          "tokens_estimated": 644,
+          "action": "create"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 813,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 15,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 328,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/package.json",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/vercel.json",
+          "tokens_estimated": 132,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/ideascope.html",
+          "tokens_estimated": 909,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/research.js",
+          "tokens_estimated": 354,
+          "action": "edit"
+        },
+        {
+          "file": "D:/Temp/ideaScope/api/research.js",
+          "tokens_estimated": 50,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35408,
+        "output_tokens_estimated": 5797,
+        "reads_count": 3,
+        "writes_count": 17,
+        "repeated_reads_blocked": 8,
+        "anatomy_lookups": 3
       }
     }
   ],

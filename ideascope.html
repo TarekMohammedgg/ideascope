@@ -1278,12 +1278,54 @@ Return exactly this JSON structure:
 /* ══════════════════════════════════════
    MARKET RESEARCH LAYER
 ══════════════════════════════════════ */
+
+// Maps Arabic keywords → English search terms so collectors can query English-language platforms
+const ARABIC_CATEGORY_MAP = [
+  { words: ['دواء','دوا','جرع','صيدل','علاج','مريض','دكتور','طبي'],  en: 'medication medicine pill tracker health app' },
+  { words: ['طعام','أكل','اكل','مطعم','توصيل','وجبة','مطاعم'],       en: 'food delivery restaurant meal' },
+  { words: ['تعليم','تدريس','درس','طالب','مدرس','كورس','منهج'],       en: 'education learning course app' },
+  { words: ['عقار','شقة','إيجار','ايجار','سكن','عمارة','فيلا'],       en: 'real estate property rental apartment' },
+  { words: ['بنك','مال','دفع','محفظ','معامل','فلوس','تحويل'],         en: 'finance payment banking wallet' },
+  { words: ['سفر','حجز','فندق','رحلة','طيران','سياحة'],               en: 'travel booking hotel flight' },
+  { words: ['تسوق','شراء','منتج','متجر','بيع'],                       en: 'shopping ecommerce store' },
+  { words: ['صح','لياقة','رياضة','تمرين','نظام غذائي'],               en: 'health fitness workout diet' },
+  { words: ['موسيقى','غناء','فيديو','ترفيه','مسلسل'],                 en: 'music video entertainment streaming' },
+  { words: ['توظيف','وظيفة','موظف','تعيين','cv'],                     en: 'jobs employment hiring resume' },
+  { words: ['توصيل','شحن','لوجستي','ناقل'],                           en: 'delivery logistics shipping courier' },
+  { words: ['تواصل','دردش','رسالة','محادثة','صديق'],                  en: 'social chat messaging communication' },
+  { words: ['صورة','تصوير','فلتر','تعديل'],                           en: 'photo editing camera filter' },
+  { words: ['خريطة','موقع','ملاحة','طريق','gps'],                     en: 'map navigation location GPS' },
+];
+
+function extractSearchQuery(idea) {
+  // Pull out English words (≥3 chars)
+  const englishWords = (idea.match(/[a-zA-Z]{3,}/g) || []);
+
+  // Detect Arabic category
+  let categoryTerms = '';
+  for (const cat of ARABIC_CATEGORY_MAP) {
+    if (cat.words.some(w => idea.includes(w))) { categoryTerms = cat.en; break; }
+  }
+
+  // App name = first Title-Cased English word
+  const appName = englishWords.find(w => /^[A-Z]/.test(w)) || '';
+
+  // Filter out noise words from English list
+  const noise = new Set(['the','and','for','with','your','arabic','english','google','drive','backup','localization','auto','use','using']);
+  const extra  = englishWords.filter(w => w !== appName && !noise.has(w.toLowerCase())).slice(0, 3);
+
+  const parts = [appName, categoryTerms, ...extra].filter(Boolean);
+  const query = [...new Set(parts)].join(' ').trim();
+  return query.length >= 5 ? query : idea.replace(/[؀-ۿ\s]+/g, ' ').trim().slice(0, 80);
+}
+
 async function fetchMarketSignals(idea, markets) {
+  const searchQuery = extractSearchQuery(idea);
   try {
     const res = await fetch('/api/research', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea, markets }),
+      body: JSON.stringify({ idea, markets, searchQuery }),
     });
     if (!res.ok) return null;
     return await res.json();

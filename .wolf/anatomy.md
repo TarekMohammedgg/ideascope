@@ -1,12 +1,12 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-13T20:11:59.327Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-13T20:38:27.418Z
 > Files: 12 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
 - `CLAUDE.md` — OpenWolf (~57 tok)
-- `ideascope.html` — IdeaScope — محلل الأسواق (~34654 tok)
+- `ideascope.html` — IdeaScope — محلل الأسواق (~35369 tok)
 - `package.json` — Node.js package manifest (~45 tok)
 - `vercel.json` (~132 tok)
 
@@ -20,7 +20,7 @@
 
 ## api/
 
-- `research.js` — POST /api/research: runs all 4 collectors in parallel, caches 6h in Upstash Redis, returns {signals:{reddit,hackernews,productHunt,appStore}} (~644 tok)
+- `research.js` — crypto: handler (~731 tok)
 
 ## api/_lib/
 
