@@ -64,6 +64,14 @@ module.exports = async function handler(req, res) {
 
   const cleanIdea    = idea.trim().slice(0, 200);
   const cleanQuery   = deriveSearchQuery(cleanIdea, searchQuery);
+
+  // coreTerms = category keywords only, no app name — used for API searches so made-up
+  // product names like "Medpusle" don't poison Reddit/HN/GitHub queries
+  const appNameWord  = cleanQuery.match(/^([A-Z][a-zA-Z]+)\s/)?.[1] || '';
+  const coreTerms    = appNameWord
+    ? cleanQuery.slice(appNameWord.length).trim().split(/\s+/).slice(0, 4).join(' ')
+    : cleanQuery.split(/\s+/).slice(0, 4).join(' ');
+
   const cleanMarkets = (Array.isArray(markets) ? markets : ['us'])
     .filter(m => ['us', 'eg', 'gulf'].includes(m))
     .sort();
@@ -77,15 +85,16 @@ module.exports = async function handler(req, res) {
   if (cached) return res.json({ ...cached, cached: true });
 
   const [reddit, hn, ph, appstore] = await Promise.allSettled([
-    collectReddit(cleanQuery, cleanMarkets),
-    collectHN(cleanQuery),
-    collectProductHunt(cleanQuery),
-    collectAppStore(cleanQuery, cleanMarkets),
+    collectReddit(coreTerms, cleanMarkets),
+    collectHN(coreTerms),
+    collectProductHunt(coreTerms),
+    collectAppStore(coreTerms, cleanMarkets),
   ]);
 
   const result = {
     idea:        cleanIdea,
-    searchQuery: cleanQuery,   // visible in response so you can verify what was searched
+    searchQuery: cleanQuery,   // full query (with app name)
+    coreTerms,                 // what was actually sent to Reddit/HN/GitHub/AppStore
     markets:     cleanMarkets,
     timestamp:   new Date().toISOString(),
     cached:      false,
