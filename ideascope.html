@@ -1331,7 +1331,7 @@ async function fetchMarketSignals(idea, markets, apiKey, provider) {
       const json = await res.json();
       raw = json.candidates?.[0]?.content?.parts?.find(p => p.text)?.text || '';
     } else {
-      // OpenRouter — use perplexity/sonar which has built-in live web search
+      // OpenRouter — append :online to the same Gemini model to enable web search
       const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -1341,7 +1341,7 @@ async function fetchMarketSignals(idea, markets, apiKey, provider) {
           'X-Title': 'IdeaScope Research'
         },
         body: JSON.stringify({
-          model: 'perplexity/sonar',
+          model: 'google/gemini-2.5-flash:online',
           messages: [{ role: 'user', content: researchPrompt }],
           max_tokens: 1024,
           temperature: 0.1
